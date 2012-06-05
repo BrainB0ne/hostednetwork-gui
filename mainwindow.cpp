@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "aboutdialog.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -123,4 +125,16 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionMinimizeToTray_triggered()
 {
     hide();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutDialog* aboutDlg = new AboutDialog(this);
+    if(aboutDlg)
+    {
+        aboutDlg->exec();
+
+        delete aboutDlg;
+        aboutDlg = 0;
+    }
 }

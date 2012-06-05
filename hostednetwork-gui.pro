@@ -41,11 +41,17 @@ RC_FILE = hostednetwork-gui.rc
 }
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    aboutdialog.cpp \
+    licensedialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    aboutdialog.h \
+    licensedialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    aboutdialog.ui \
+    licensedialog.ui
 
 OTHER_FILES += \
     images/wifi.png \
@@ -55,7 +61,9 @@ OTHER_FILES += \
     images/refresh.png \
     images/exit.png \
     images/about.png \
-    images/wifi.ico
+    images/wifi.ico \
+    gpl-3.0.txt \
+    hostednetwork-gui.rc
 
 RESOURCES += \
     hostednetwork-gui.qrc

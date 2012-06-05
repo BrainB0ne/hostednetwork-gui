@@ -36,6 +36,8 @@ private slots:
 
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
 
