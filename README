@@ -1,0 +1,28 @@
+********************** WLAN Hosted Network Manager ***********************
+
+This project is a GUI application for managing (creating/starting/stopping) 
+a WLAN hostednetwork also known as Virtual WiFi Network.
+
+This project is developed with Qt 4.8.2
+
+This application executes netsh commands available in Windows 7
+to create a Virtual Wireless Network.
+
+System Requirements: Windows 7
+
+**************************************************************************
+
+WLAN Hosted Network Manager
+Copyleft 2012
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
