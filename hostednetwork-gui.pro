@@ -80,7 +80,8 @@ OTHER_FILES += \
     images/about.png \
     images/wifi.ico \
     gpl-3.0.txt \
-    hostednetwork-gui.rc
+    hostednetwork-gui.rc \
+    README
 
 RESOURCES += \
     hostednetwork-gui.qrc
