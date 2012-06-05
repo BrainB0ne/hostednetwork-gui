@@ -1,5 +1,5 @@
 /*
- * Spotweb Filter Creator
+ * WLAN Hosted Network Manager
  * Copyleft 2012
  *
  * This program is free software: you can redistribute it and/or modify
