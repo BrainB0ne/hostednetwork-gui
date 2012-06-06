@@ -20,6 +20,8 @@
 
 #include "aboutdialog.h"
 
+#include <QProcess>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -31,6 +33,14 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
     createTrayIcon();
     setIcon();
+
+    // validator to allow only ASCII characters
+    QRegExp passphraseRegExp("^[\\x00-\\x7F]{8,63}$");
+    QValidator *passphraseValidator = new QRegExpValidator(passphraseRegExp, this);
+    ui->passphraseLineEdit->setValidator(passphraseValidator);
+
+    ui->passphraseLineEdit->setFocus();
+    statusBar()->hide();
 
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -76,7 +86,7 @@ void MainWindow::createActions()
     restoreAction = new QAction(tr("&Restore"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
-    quitAction = new QAction(tr("&Quit"), this);
+    quitAction = new QAction(tr("E&xit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
@@ -114,24 +124,135 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+bool MainWindow::runCommand(const QString& program, const QStringList& args)
+{
+    QProcess netsh;
+    netsh.start(program, args);
+    if (!netsh.waitForStarted())
+        return false;
+
+    netsh.closeWriteChannel();
+
+    if (!netsh.waitForFinished())
+        return false;
+
+    QByteArray result = netsh.readAll();
+    QString strResult = result.data();
+
+    ui->logTextEdit->appendPlainText(strResult);
+
+    // a little bit dirty, but it does the job :-)
+    if(strResult.contains("The hosted network couldn't be started."))
+    {
+        ui->actionStart->setEnabled(true);
+        ui->passphraseLineEdit->setEnabled(true);
+        ui->ssidLineEdit->setEnabled(true);
+    }
+    else if(strResult.contains("The hosted network started."))
+    {
+        ui->actionStart->setEnabled(false);
+        ui->passphraseLineEdit->setEnabled(false);
+        ui->ssidLineEdit->setEnabled(false);
+    }
+    else if(strResult.contains("The hosted network stopped."))
+    {
+        ui->actionStart->setEnabled(true);
+        ui->passphraseLineEdit->setEnabled(true);
+        ui->ssidLineEdit->setEnabled(true);
+    }
+
+    return true;
+}
+
 void MainWindow::on_actionStart_triggered()
 {
+    ui->ssidLineEdit->setText(ui->ssidLineEdit->text().trimmed());
 
+    if(ui->ssidLineEdit->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Warning", "Can't start WLAN Hosted Network.\nPlease fill in the SSID field.");
+        return;
+    }
+
+    if(ui->passphraseLineEdit->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Warning", "Can't start WLAN Hosted Network.\nPlease fill in the Passphrase field.");
+        return;
+    }
+
+    if((ui->passphraseLineEdit->text().length() < 8) || (ui->passphraseLineEdit->text().length() > 63))
+    {
+        QMessageBox::warning(this, "Warning", "Can't start WLAN Hosted Network.\nPlease fill in the Passphrase field correctly (8-63 ASCII characters).");
+        return;
+    }
+
+    ui->logTextEdit->appendPlainText("> Starting WLAN Hosted Network ...");
+
+    QStringList argsSet;
+    argsSet << "wlan" << "set" << "hostednetwork" << "mode=allow";
+    argsSet << QString("ssid=%1").arg(ui->ssidLineEdit->text());
+    argsSet << QString("key=%1").arg(ui->passphraseLineEdit->text());
+
+    bool ok = runCommand("netsh", argsSet);
+
+    if(!ok)
+    {
+        QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
+    }
+
+    QStringList argsStart;
+    argsStart << "wlan" << "start" << "hostednetwork";
+
+    ok = runCommand("netsh", argsStart);
+
+    if(!ok)
+    {
+        QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
+    }
 }
 
 void MainWindow::on_actionStop_triggered()
 {
+    ui->logTextEdit->appendPlainText("> Stopping WLAN Hosted Network ...");
+
+    QStringList args;
+    args << "wlan" << "stop" << "hostednetwork";
+
+    bool ok = runCommand("netsh", args);
+
+    if(!ok)
+    {
+        QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
+    }
 
 }
 
 void MainWindow::on_actionShow_triggered()
 {
+    ui->logTextEdit->appendPlainText("> Show WLAN Hosted Network ...");
+
+    QStringList args;
+    args << "wlan" << "show" << "hostednetwork";
+
+    bool ok = runCommand("netsh", args);
+
+    if(!ok)
+    {
+        QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
+    }
 
 }
 
-void MainWindow::on_actionRefresh_triggered()
+void MainWindow::on_showPassphraseCheckBox_toggled(bool checked)
 {
-
+    if(checked)
+    {
+        ui->passphraseLineEdit->setEchoMode(QLineEdit::Normal);
+    }
+    else
+    {
+        ui->passphraseLineEdit->setEchoMode(QLineEdit::Password);
+    }
 }
 
 void MainWindow::on_actionExit_triggered()

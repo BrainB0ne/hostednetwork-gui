@@ -35,6 +35,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    bool runCommand(const QString& program, const QStringList& args);
+
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -47,13 +49,11 @@ private slots:
     void on_actionStart_triggered();
     void on_actionStop_triggered();
     void on_actionShow_triggered();
-    void on_actionRefresh_triggered();
     void on_actionExit_triggered();
     void on_actionMinimizeToTray_triggered();
-
-    void iconActivated(QSystemTrayIcon::ActivationReason reason);
-
     void on_actionAbout_triggered();
+    void on_showPassphraseCheckBox_toggled(bool checked);
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::MainWindow *ui;

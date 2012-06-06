@@ -27,7 +27,11 @@
      </widget>
     </item>
     <item row="0" column="1" colspan="2">
-     <widget class="QLineEdit" name="ssidLineEdit"/>
+     <widget class="QLineEdit" name="ssidLineEdit">
+      <property name="text">
+       <string>VirtualAP</string>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="passphraseLabel">
@@ -51,7 +55,17 @@
      </widget>
     </item>
     <item row="2" column="0" colspan="3">
-     <widget class="QPlainTextEdit" name="logTextEdit"/>
+     <widget class="QPlainTextEdit" name="logTextEdit">
+      <property name="font">
+       <font>
+        <family>Lucida Console</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -78,7 +92,6 @@
     </property>
     <addaction name="actionStart"/>
     <addaction name="actionStop"/>
-    <addaction name="actionRefresh"/>
     <addaction name="actionShow"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -100,7 +113,6 @@
    </attribute>
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
-   <addaction name="actionRefresh"/>
    <addaction name="actionShow"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -124,6 +136,9 @@
    <property name="text">
     <string>&amp;Start</string>
    </property>
+   <property name="toolTip">
+    <string>Start Hosted Network</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
@@ -135,6 +150,9 @@
    </property>
    <property name="text">
     <string>Sto&amp;p</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop Hosted Network</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -148,6 +166,9 @@
    <property name="text">
     <string>Sho&amp;w</string>
    </property>
+   <property name="toolTip">
+    <string>Show Hosted Network</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
@@ -159,6 +180,9 @@
    </property>
    <property name="text">
     <string>&amp;Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh Hosted Network</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
