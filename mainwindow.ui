@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>376</height>
+    <width>568</width>
+    <height>461</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,43 +18,47 @@
     <normaloff>:/images/wifi.png</normaloff>:/images/wifi.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
-     <widget class="QLabel" name="ssidLabel">
-      <property name="text">
-       <string>SSID:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" colspan="2">
-     <widget class="QLineEdit" name="ssidLineEdit">
-      <property name="text">
-       <string>VirtualAP</string>
-      </property>
-     </widget>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="ssidLabel">
+        <property name="text">
+         <string>SSID:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="ssidLineEdit">
+        <property name="text">
+         <string>VirtualAP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="passphraseLabel">
+        <property name="text">
+         <string>Passphrase:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="passphraseLineEdit">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="showPassphraseCheckBox">
+        <property name="text">
+         <string>Show Passphrase</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="passphraseLabel">
-      <property name="text">
-       <string>Passphrase:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="passphraseLineEdit">
-      <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QCheckBox" name="showPassphraseCheckBox">
-      <property name="text">
-       <string>Show Passphrase</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="3">
      <widget class="QPlainTextEdit" name="logTextEdit">
       <property name="font">
        <font>
@@ -67,6 +71,38 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="statusLabel">
+        <property name="text">
+         <string>Hosted Network Status:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="statusLineEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="numberClientsLabel">
+        <property name="text">
+         <string>Number of Clients:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="numberClientsLineEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -74,7 +110,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>517</width>
+     <width>568</width>
      <height>21</height>
     </rect>
    </property>

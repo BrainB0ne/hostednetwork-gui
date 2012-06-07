@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         trayIcon->show();
     }
+
+    runAndParseShowHostedNetworkCommand();
 }
 
 MainWindow::~MainWindow()
@@ -124,8 +126,55 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+bool MainWindow::runAndParseShowHostedNetworkCommand()
+{
+    QStringList args;
+    args << "wlan" << "show" << "hostednetwork";
+
+    QProcess netsh;
+    netsh.start("netsh", args);
+    if (!netsh.waitForStarted())
+        return false;
+
+    netsh.closeWriteChannel();
+
+    if (!netsh.waitForFinished())
+        return false;
+
+    QByteArray result = netsh.readAll();
+    QString strResult = result.data();
+
+    QRegExp rxSSID("\\s*SSID name\\s*:\\s*\"(.*)\"");
+    int pos = rxSSID.indexIn(strResult);
+    if (pos > -1)
+    {
+        QString strSSID = rxSSID.cap(1);
+        ui->ssidLineEdit->setText(strSSID.trimmed());
+    }
+
+    QRegExp rxStatus("\\s*Status\\s*:\\s*((\\w|\\s)*)\\r\\n");
+    pos = rxStatus.indexIn(strResult);
+    if (pos > -1)
+    {
+        QString strStatus = rxStatus.cap(1);
+        ui->statusLineEdit->setText(strStatus.trimmed());
+    }
+
+    QRegExp rxNumberClients("\\s*Number of clients\\s*:\\s*((\\w|\\s)*)\\r\\n");
+    pos = rxNumberClients.indexIn(strResult);
+    if (pos > -1)
+    {
+        QString strNumberClients = rxNumberClients.cap(1);
+        ui->numberClientsLineEdit->setText(strNumberClients.trimmed());
+    }
+
+    return true;
+}
+
 bool MainWindow::runCommand(const QString& program, const QStringList& args)
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     QProcess netsh;
     netsh.start(program, args);
     if (!netsh.waitForStarted())
@@ -160,6 +209,10 @@ bool MainWindow::runCommand(const QString& program, const QStringList& args)
         ui->passphraseLineEdit->setEnabled(true);
         ui->ssidLineEdit->setEnabled(true);
     }
+
+    runAndParseShowHostedNetworkCommand();
+
+    QApplication::restoreOverrideCursor();
 
     return true;
 }

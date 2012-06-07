@@ -36,6 +36,7 @@ public:
     ~MainWindow();
 
     bool runCommand(const QString& program, const QStringList& args);
+    bool runAndParseShowHostedNetworkCommand();
 
 protected:
     void closeEvent(QCloseEvent *event);
