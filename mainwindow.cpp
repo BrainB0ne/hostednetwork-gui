@@ -198,6 +198,25 @@ bool MainWindow::runAndParseShowHostedNetworkCommand()
     {
         QString strStatus = rxStatus.cap(1);
         ui->statusLineEdit->setText(strStatus.trimmed());
+
+        if(strStatus.trimmed() == "Not started")
+        {
+            ui->actionStart->setEnabled(true);
+            ui->passphraseLineEdit->setEnabled(true);
+            ui->ssidLineEdit->setEnabled(true);
+        }
+        else if(strStatus.trimmed() == "Started")
+        {
+            ui->actionStart->setEnabled(false);
+            ui->passphraseLineEdit->setEnabled(false);
+            ui->ssidLineEdit->setEnabled(false);
+        }
+        else if(strStatus.trimmed() == "Not available")
+        {
+            ui->actionStart->setEnabled(true);
+            ui->passphraseLineEdit->setEnabled(true);
+            ui->ssidLineEdit->setEnabled(true);
+        }
     }
 
     QRegExp rxNumberClients("\\s*Number of clients\\s*:\\s*((\\w|\\s)*)\\r\\n");
@@ -252,26 +271,6 @@ bool MainWindow::runCommand(const QString& program, const QStringList& args)
     QString strResult = result.data();
 
     ui->logTextEdit->appendPlainText(strResult);
-
-    // a little bit dirty, but it does the job :-)
-    if(strResult.contains("The hosted network couldn't be started."))
-    {
-        ui->actionStart->setEnabled(true);
-        ui->passphraseLineEdit->setEnabled(true);
-        ui->ssidLineEdit->setEnabled(true);
-    }
-    else if(strResult.contains("The hosted network started."))
-    {
-        ui->actionStart->setEnabled(false);
-        ui->passphraseLineEdit->setEnabled(false);
-        ui->ssidLineEdit->setEnabled(false);
-    }
-    else if(strResult.contains("The hosted network stopped."))
-    {
-        ui->actionStart->setEnabled(true);
-        ui->passphraseLineEdit->setEnabled(true);
-        ui->ssidLineEdit->setEnabled(true);
-    }
 
     QApplication::restoreOverrideCursor();
 
