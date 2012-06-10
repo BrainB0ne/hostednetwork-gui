@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>632</width>
+    <width>692</width>
     <height>461</height>
    </rect>
   </property>
@@ -156,7 +156,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>632</width>
+     <width>692</width>
      <height>21</height>
     </rect>
    </property>
@@ -176,6 +176,8 @@
     <addaction name="actionStart"/>
     <addaction name="actionStop"/>
     <addaction name="actionShow"/>
+    <addaction name="separator"/>
+    <addaction name="actionWLANDriverInfo"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -200,6 +202,8 @@
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
    <addaction name="actionShow"/>
+   <addaction name="separator"/>
+   <addaction name="actionWLANDriverInfo"/>
    <addaction name="separator"/>
    <addaction name="actionClearLog"/>
    <addaction name="separator"/>
@@ -308,6 +312,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionWLANDriverInfo">
+   <property name="icon">
+    <iconset resource="hostednetwork-gui.qrc">
+     <normaloff>:/images/drivers.png</normaloff>:/images/drivers.png</iconset>
+   </property>
+   <property name="text">
+    <string>WLAN Driver &amp;Information</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

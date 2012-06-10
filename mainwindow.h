@@ -54,13 +54,13 @@ private slots:
     void on_actionStart_triggered();
     void on_actionStop_triggered();
     void on_actionShow_triggered();
+    void on_actionWLANDriverInfo_triggered();
+    void on_actionClearLog_triggered();
     void on_actionExit_triggered();
     void on_actionMinimizeToTray_triggered();
     void on_actionAbout_triggered();
-    void on_showPassphraseCheckBox_toggled(bool checked);
+    void on_showPassphraseCheckBox_toggled(bool checked);    
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-
-    void on_actionClearLog_triggered();
 
 private:
     Ui::MainWindow *ui;

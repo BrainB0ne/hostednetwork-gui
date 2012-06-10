@@ -10,5 +10,6 @@
         <file>gpl-3.0.txt</file>
         <file>images/clear.png</file>
         <file>images/minimizetotray.png</file>
+        <file>images/drivers.png</file>
     </qresource>
 </RCC>

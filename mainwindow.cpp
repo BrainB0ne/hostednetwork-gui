@@ -273,8 +273,6 @@ bool MainWindow::runCommand(const QString& program, const QStringList& args)
         ui->ssidLineEdit->setEnabled(true);
     }
 
-    runAndParseShowHostedNetworkCommand();
-
     QApplication::restoreOverrideCursor();
 
     return true;
@@ -325,6 +323,8 @@ void MainWindow::on_actionStart_triggered()
     {
         QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
     }
+
+    runAndParseShowHostedNetworkCommand();
 }
 
 void MainWindow::on_actionStop_triggered()
@@ -341,6 +341,7 @@ void MainWindow::on_actionStop_triggered()
         QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
     }
 
+    runAndParseShowHostedNetworkCommand();
 }
 
 void MainWindow::on_actionShow_triggered()
@@ -357,6 +358,23 @@ void MainWindow::on_actionShow_triggered()
         QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
     }
 
+    runAndParseShowHostedNetworkCommand();
+}
+
+
+void MainWindow::on_actionWLANDriverInfo_triggered()
+{
+    ui->logTextEdit->appendPlainText("> WLAN Driver Information ...");
+
+    QStringList args;
+    args << "wlan" << "show" << "drivers";
+
+    bool ok = runCommand("netsh", args);
+
+    if(!ok)
+    {
+        QMessageBox::critical(this, "Error", "Netsh command failed to execute!");
+    }
 }
 
 void MainWindow::on_showPassphraseCheckBox_toggled(bool checked)
