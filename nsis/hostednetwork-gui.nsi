@@ -40,7 +40,7 @@ LicenseData "license.txt"
 # This will be in the installer/uninstaller's title bar
 Name "${APPNAME}"
 Icon "logo.ico"
-outFile "wlan-hostednetwork-manager-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-win32-setup.exe"
+outFile "whnm-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-win32-setup.exe"
  
 !include LogicLib.nsh
  
