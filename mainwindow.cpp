@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     m_bTrayWarningShowed = false;
+    m_pSettings = 0;
 
     createActions();
     createTrayIcon();
@@ -50,12 +51,50 @@ MainWindow::MainWindow(QWidget *parent) :
         trayIcon->show();
     }
 
+    loadSettings();
     runAndParseShowHostedNetworkCommand();
 }
 
 MainWindow::~MainWindow()
 {
+    if(m_pSettings)
+    {
+        delete m_pSettings;
+        m_pSettings = 0;
+    }
+
     delete ui;
+}
+
+void MainWindow::loadSettings()
+{
+    m_pSettings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "WLAN Hosted Network Manager", "settings", this);
+
+    if(m_pSettings)
+    {
+        QString strStorePassphrase = m_pSettings->value("Settings/StorePassphrase", "no").toString();
+        ui->storePassphraseCheckBox->setChecked( (strStorePassphrase == "yes") ? true : false);
+
+        QString strPassphrase = m_pSettings->value("Settings/Passphrase", "").toString();
+        ui->passphraseLineEdit->setText(strPassphrase);
+    }
+}
+
+void MainWindow::saveSettings()
+{
+    if(m_pSettings)
+    {
+        m_pSettings->setValue("Settings/StorePassphrase", ui->storePassphraseCheckBox->isChecked() ? "yes" : "no");
+
+        if(ui->storePassphraseCheckBox->isChecked())
+        {
+            m_pSettings->setValue("Settings/Passphrase", ui->passphraseLineEdit->text());
+        }
+        else
+        {
+            m_pSettings->setValue("Settings/Passphrase", "");
+        }
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -89,7 +128,7 @@ void MainWindow::createActions()
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
     quitAction = new QAction(tr("E&xit"), this);
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(on_actionExit_triggered()));
 }
 
 void MainWindow::createTrayIcon()
@@ -143,6 +182,8 @@ bool MainWindow::runAndParseShowHostedNetworkCommand()
 
     QByteArray result = netsh.readAll();
     QString strResult = result.data();
+
+    // forgive me if there are some bugs here.. me != regexp-guru ;)
 
     QRegExp rxSSID("\\s*SSID name\\s*:\\s*\"(.*)\"");
     int pos = rxSSID.indexIn(strResult);
@@ -310,6 +351,7 @@ void MainWindow::on_showPassphraseCheckBox_toggled(bool checked)
 
 void MainWindow::on_actionExit_triggered()
 {
+    saveSettings();
     qApp->quit();
 }
 
@@ -328,4 +370,9 @@ void MainWindow::on_actionAbout_triggered()
         delete aboutDlg;
         aboutDlg = 0;
     }
+}
+
+void MainWindow::on_actionClearLog_triggered()
+{
+    ui->logTextEdit->clear();
 }

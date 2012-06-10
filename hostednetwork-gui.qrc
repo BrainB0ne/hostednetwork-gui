@@ -8,5 +8,7 @@
         <file>images/about.png</file>
         <file>images/exit.png</file>
         <file>gpl-3.0.txt</file>
+        <file>images/clear.png</file>
+        <file>images/minimizetotray.png</file>
     </qresource>
 </RCC>

@@ -81,7 +81,9 @@ OTHER_FILES += \
     images/wifi.ico \
     gpl-3.0.txt \
     hostednetwork-gui.rc \
-    README
+    README \
+    images/minimizetotray.png \
+    images/clear.png
 
 RESOURCES += \
     hostednetwork-gui.qrc

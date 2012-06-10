@@ -22,6 +22,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QMessageBox>
+#include <QSettings>
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +35,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void loadSettings();
+    void saveSettings();
 
     bool runCommand(const QString& program, const QStringList& args);
     bool runAndParseShowHostedNetworkCommand();
@@ -56,6 +60,8 @@ private slots:
     void on_showPassphraseCheckBox_toggled(bool checked);
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
+    void on_actionClearLog_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -65,6 +71,8 @@ private:
     QAction *quitAction;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
+
+    QSettings *m_pSettings;
     bool m_bProcessRunning;
     bool m_bTrayWarningShowed;
 };
