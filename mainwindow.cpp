@@ -40,7 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QValidator *passphraseValidator = new QRegExpValidator(passphraseRegExp, this);
     ui->passphraseLineEdit->setValidator(passphraseValidator);
 
-    ui->passphraseLineEdit->setFocus();
     statusBar()->hide();
 
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -207,6 +206,29 @@ bool MainWindow::runAndParseShowHostedNetworkCommand()
     {
         QString strNumberClients = rxNumberClients.cap(1);
         ui->numberClientsLineEdit->setText(strNumberClients.trimmed());
+    }
+    else
+    {
+        ui->numberClientsLineEdit->setText("");
+    }
+
+    QRegExp rxMacAddresses("([0-9a-fA-F]{2}[:-][0-9a-fA-F]{2}[:-][0-9a-fA-F]{2}[:-][0-9a-fA-F]{2}[:-][0-9a-fA-F]{2}[:-][0-9a-fA-F]{2})\\s*Authenticated");
+
+    ui->macListWidget->clear();
+
+    //pos = 0;    // where we are in the string
+    int count = 0;  // how many MAC addresses we've counted
+    while (pos >= 0)
+    {
+        pos = rxMacAddresses.indexIn(strResult, pos);
+        if (pos >= 0)
+        {
+            QListWidgetItem *item = new QListWidgetItem(ui->macListWidget);
+            item->setText(rxMacAddresses.cap(1));
+
+            ++pos;      // move along in strResult
+            ++count;    // count MAC address
+        }
     }
 
     return true;
