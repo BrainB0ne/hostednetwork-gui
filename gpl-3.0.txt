@@ -1,6 +1,6 @@
                     GNU GENERAL PUBLIC LICENSE
 
-You may use, distribute and copy Spotweb Filter Creator
+You may use, distribute and copy WLAN Hosted Network Manager
 under the terms of GNU General Public License version 3,
 which is displayed below.
 
