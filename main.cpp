@@ -16,13 +16,34 @@
  */
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+
+    QApplication::setApplicationName("WLAN Hosted Network Manager");
+    QApplication::setApplicationVersion("0.2.0");
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("WLAN Hosted Network Manager");
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    // A boolean option with a single name (-a)
+    QCommandLineOption autoStartOption("a", QCoreApplication::translate("main", "Automatically start hosted network"));
+    parser.addOption(autoStartOption);
+
+    // Process the actual command line arguments given by the user
+    parser.process(app);
+
+    bool autoStart = parser.isSet(autoStartOption);
+
     MainWindow w;
+
+    w.initialize(autoStart);
     w.show();
     
-    return a.exec();
+    return app.exec();
 }

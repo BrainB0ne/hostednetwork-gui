@@ -29,7 +29,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     m_pLicenseDlg = 0;
 
     ui->buildDateLabel->setText(tr("Build Date: %1 - %2").arg(__DATE__).arg(__TIME__));
-    ui->versionLabel->setText(tr("Version: %1").arg("0.1.0"));
+    ui->versionLabel->setText(tr("Version: %1").arg(QApplication::applicationVersion()));
 
     connect(ui->licenseButton, SIGNAL(clicked()), this, SLOT(slotLicenseButtonClicked()));
 }

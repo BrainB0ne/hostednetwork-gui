@@ -19,7 +19,7 @@
 
 # These three must be integers
 !define VERSIONMAJOR 0
-!define VERSIONMINOR 1
+!define VERSIONMINOR 2
 !define VERSIONBUILD 0
 
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
@@ -29,7 +29,7 @@
 !define ABOUTURL "" # "Publisher" link
 
 # This is the size (in kB) of all the files copied into "Program Files"
-!define INSTALLSIZE 11383
+!define INSTALLSIZE 47292
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
  
@@ -68,13 +68,20 @@ section "install"
 	# Files for the install directory - to build the installer, these should be in the same directory as the install script (this file)
 	setOutPath $INSTDIR
 	
-    # Files added here should be removed by the uninstaller (see section "uninstall")
+	# Files added here should be removed by the uninstaller (see section "uninstall")
 	file "hostednetwork-gui.exe"
-    file "QtCore4.dll"
-    file "QtGui4.dll"
-    file "logo.ico"
+	file "D3Dcompiler_47.dll"
+	file "libEGL.dll"
+	file "libGLESV2.dll"
+	file "opengl32sw.dll"
+	file "Qt5Core.dll"
+	file "Qt5Gui.dll"
+	file "Qt5Widgets.dll"
+	file "logo.ico"
+	file /r "platforms"
+	file /r "styles"
 	
-    # Add any other files for the install directory (license files, app data, etc) here
+	# Add any other files for the install directory (license files, app data, etc) here
  
 	# Uninstaller - See function un.onInit and section "uninstall" for configuration
 	writeUninstaller "$INSTDIR\uninstall.exe"
@@ -124,10 +131,20 @@ section "uninstall"
  
 	# Remove files
 	delete $INSTDIR\hostednetwork-gui.exe
-    delete $INSTDIR\QtCore4.dll
-    delete $INSTDIR\QtGui4.dll
-    delete $INSTDIR\logo.ico
+	delete $INSTDIR\D3Dcompiler_47.dll
+	delete $INSTDIR\libEGL.dll
+	delete $INSTDIR\libGLESV2.dll
+	delete $INSTDIR\opengl32sw.dll
+	delete $INSTDIR\Qt5Core.dll
+	delete $INSTDIR\Qt5Gui.dll
+	delete $INSTDIR\Qt5Widgets.dll
+	delete $INSTDIR\platforms\qwindows.dll
+	delete $INSTDIR\styles\qwindowsvistastyle.dll
+	delete $INSTDIR\logo.ico
  
+	rmDir $INSTDIR\platforms
+	rmDir $INSTDIR\styles
+
 	# Always delete uninstaller as the last action
 	delete $INSTDIR\uninstall.exe
  

@@ -26,11 +26,25 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
     m_bTrayWarningShowed = false;
     m_pSettings = 0;
 
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    if(m_pSettings)
+    {
+        delete m_pSettings;
+        m_pSettings = 0;
+    }
+
+    delete ui;
+}
+
+void MainWindow::initialize(bool autoStart)
+{
     createActions();
     createTrayIcon();
     setIcon();
@@ -52,17 +66,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     loadSettings();
     runAndParseShowHostedNetworkCommand();
-}
 
-MainWindow::~MainWindow()
-{
-    if(m_pSettings)
+    if(autoStart && ui->actionStart->isEnabled())
     {
-        delete m_pSettings;
-        m_pSettings = 0;
+        on_actionStart_triggered();
     }
-
-    delete ui;
 }
 
 void MainWindow::loadSettings()
