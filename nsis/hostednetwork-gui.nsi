@@ -20,7 +20,7 @@
 # These three must be integers
 !define VERSIONMAJOR 0
 !define VERSIONMINOR 2
-!define VERSIONBUILD 0
+!define VERSIONBUILD 1
 
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client
@@ -29,7 +29,7 @@
 !define ABOUTURL "" # "Publisher" link
 
 # This is the size (in kB) of all the files copied into "Program Files"
-!define INSTALLSIZE 47292
+!define INSTALLSIZE 37589
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
  
