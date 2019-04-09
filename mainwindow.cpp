@@ -21,6 +21,7 @@
 #include "aboutdialog.h"
 
 #include <QProcess>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,7 +44,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::initialize(bool autoStart)
+void MainWindow::initialize()
 {
     createActions();
     createTrayIcon();
@@ -66,11 +67,32 @@ void MainWindow::initialize(bool autoStart)
 
     loadSettings();
     runAndParseShowHostedNetworkCommand();
+}
 
-    if(autoStart && ui->actionStart->isEnabled())
+void MainWindow::autoStart(bool autoStart, int autoStartDelay)
+{
+    if(autoStart)
+    {
+        if(autoStartDelay >= 0)
+        {
+            QTimer::singleShot(autoStartDelay, this, SLOT(hitStartButton()));
+            setWindowTitle(tr("WLAN Hosted Network Manager [Waiting %1 seconds to start...]").arg(autoStartDelay / 1000));
+        }
+        else
+        {
+            hitStartButton();
+        }
+    }
+}
+
+void MainWindow::hitStartButton()
+{
+    if(ui->actionStart->isEnabled())
     {
         on_actionStart_triggered();
     }
+
+    setWindowTitle(tr("WLAN Hosted Network Manager"));
 }
 
 void MainWindow::loadSettings()

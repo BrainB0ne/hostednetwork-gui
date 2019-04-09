@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QApplication::setApplicationName("WLAN Hosted Network Manager");
-    QApplication::setApplicationVersion("0.2.0");
+    QApplication::setApplicationVersion("0.3.0");
 
     QCommandLineParser parser;
     parser.setApplicationDescription("WLAN Hosted Network Manager");
@@ -35,15 +35,33 @@ int main(int argc, char *argv[])
     QCommandLineOption autoStartOption("a", QCoreApplication::translate("main", "Automatically start hosted network"));
     parser.addOption(autoStartOption);
 
+    // An option with a value
+    QCommandLineOption autoStartDelayOption(QStringList() << "d" << "delay",
+                                            QCoreApplication::translate("main", "Auto-start delay in <seconds>"),
+                                            QCoreApplication::translate("main", "seconds"));
+    parser.addOption(autoStartDelayOption);
+
     // Process the actual command line arguments given by the user
     parser.process(app);
 
     bool autoStart = parser.isSet(autoStartOption);
+    bool autoStartDelayIsUint = false;
+    int autoStartDelay = parser.value(autoStartDelayOption).toUInt(&autoStartDelayIsUint);
+
+    if (!autoStartDelayIsUint)
+    {
+        autoStartDelay = -1;
+    }
+    else
+    {
+        autoStartDelay = autoStartDelay * 1000;
+    }
 
     MainWindow w;
 
-    w.initialize(autoStart);
+    w.initialize();
     w.show();
+    w.autoStart(autoStart, autoStartDelay);
     
     return app.exec();
 }

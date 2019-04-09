@@ -36,7 +36,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void initialize(bool autoStart);
+    void initialize();
+    void autoStart(bool autoStart, int autoStartDelay);
 
     void loadSettings();
     void saveSettings();
@@ -63,6 +64,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_showPassphraseCheckBox_toggled(bool checked);    
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void hitStartButton();
 
 private:
     Ui::MainWindow *ui;
