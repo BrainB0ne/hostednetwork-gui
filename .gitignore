@@ -1,6 +1,7 @@
 # Custom Files / Folders
 /debug
 /release
+/*build
 /zip
 /installer/Output
 
