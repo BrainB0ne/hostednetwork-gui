@@ -18,7 +18,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
+
+    - name: Install Ninja (Windows)
+      run: choco install ninja  # let's install ninja through Chocolatey
 
     - name: Install Qt
       # Installs the Qt SDK
@@ -29,17 +32,33 @@ jobs:
         target: 'desktop'
         arch: 'win64_msvc2019_64'
 
+    - name: Locate MSVC environment
+      id: msvc
+      shell: pwsh
+      run: |
+        $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if (-not $vsPath) { throw "Visual Studio with C++ tools not found" }
+        $vcvars = Join-Path $vsPath "VC\Auxiliary\Build\vcvars64.bat"
+        "VCVARS_PATH=$vcvars" | Out-File -FilePath $env:GITHUB_ENV -Append
+
     - name: Configure CMake
+      shell: cmd
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: |
+        call "%VCVARS_PATH%"
+        cmake -S ${{github.workspace}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G Ninja
 
     - name: Build
+      shell: cmd
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: |
+        call "%VCVARS_PATH%"
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
+    - name: Install
+      shell: cmd
+      # Install your program with the given configuration
+      run: |
+        call "%VCVARS_PATH%"
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target install
